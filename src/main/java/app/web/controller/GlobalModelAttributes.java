@@ -16,4 +16,9 @@ public class GlobalModelAttributes {
     public boolean isAdmin(){
         return userService.isAdmin();
     }
+
+    @ModelAttribute("isLoggedIn")
+    public boolean isLoggedIn(){
+        return userService.isLoggedIn();
+    }
 }

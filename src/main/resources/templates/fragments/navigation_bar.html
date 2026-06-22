@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Navigation bar</title>
+</head>
+<body>
+<div th:fragment="nav-bar" class='container header-inner'>
+    <a th:href="@{/index}" class='logo'>HoneyShop<span></span></a>
+
+    <nav class='main-nav'>
+        <a class='nav-link' th:classappend="${activePage == 'index'} ? ' active'" th:href="@{/index}">Начало</a>
+        <a class='nav-link' th:href="@{/products}">Магазин</a>
+        <a class='nav-link' th:classappend="${activePage == 'cart'} ? ' active'" th:href="@{/cart}">Количка</a>
+        <a class='nav-link' th:classappend="${activePage == 'profile'} ? ' active'" th:href="@{/profile}">Моят профил</a>
+        <a class='nav-link' th:classappend="${activePage == 'orders'} ? ' active'" th:href="@{/orders}">Моите поръчки</a>
+    </nav>
+
+    <div class='header-actions'>
+        <form th:action="@{/logout}" method="post">
+            <button class='action-pill dark' type="submit">Изход</button>
+        </form>
+        <a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a>
+    </div>
+</div>
+</body>
+</html>

@@ -152,4 +152,8 @@ public class UserService {
             return false;
         }
     }
+
+    public boolean isLoggedIn() {
+        return session.getAttribute("user_id") != null;
+    }
 }
