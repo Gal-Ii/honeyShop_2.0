@@ -7,12 +7,29 @@
 <link rel='stylesheet' th:href="@{/css/style.css}">
 </head>
 <body>
-<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div><header class='site-header'><div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a><nav class='main-nav'><a class='nav-link ' th:href="@{/index}">Начало</a><a class='nav-link ' th:href="@{/products}">Магазин</a><a class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link ' th:href="@{/profile}">Моят профил</a><a class='nav-link active' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav><div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill' th:href="@{/register}">Регистрирай се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div></div></header>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div>
+<header class='site-header'>
+  <div class='container header-inner'>
+    <a th:href="@{/index}" class='logo'>HoneyShop<span></span>
+    </a>
+    <nav class='main-nav'>
+      <a class='nav-link ' th:href="@{/index}">Начало</a>
+      <a class='nav-link ' th:href="@{/products}">Магазин</a>
+      <a class='nav-link ' th:href="@{/cart}">Количка</a>
+      <a class='nav-link ' th:href="@{/profile}">Моят профил</a>
+      <a class='nav-link active' th:if="${isAdmin}" th:href="@{/admin}">Админ</a>
+    </nav>
+    <div class='header-actions'>
+      <a class='action-pill dark' th:href="@{/login}">Вход</a>
+      <a class='action-pill' th:href="@{/register}">Регистрирай се</a>
+      <a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a>
+    </div>
+  </div>
+</header>
 
 <section class='page-hero'>
   <div class='container'>
     <h1>Създадени продукти</h1>
-    <p>Администраторът вижда всички създадени продукти и основните им полета от Product entity.</p>
   </div>
 </section>
 
@@ -61,7 +78,6 @@
       </div>
 
       <p class='hint admin-products-note'>
-        В реалната Spring Boot версия тези данни ще идват от базата чрез ProductService и ProductRepository.
       </p>
     </div>
   </div>
