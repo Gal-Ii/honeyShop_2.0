@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang='bg' xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>HoneyShop - Моят профил</title>
+    <link rel='stylesheet' th:href="@{/css/style.css}">
+</head>
+<body>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div>
+<header class='site-header'>
+    <div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a>
+        <nav class='main-nav'><a class='nav-link ' th:href="@{/index}">Начало</a><a class='nav-link '
+                                                                                    th:href="@{/products}">Магазин</a><a
+                class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link active' th:href="@{/profile}">Моят
+            профил</a><a class='nav-link ' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav>
+        <div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill'
+                                                                                               th:href="@{/register}">Регистрирай
+            се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div>
+    </div>
+</header>
+<section class='page-hero'>
+    <div class='container'>
+        <h1>Моят профил</h1>
+    </div>
+</section>
+
+<section class='section'>
+    <div class='container'>
+        <div class='profile-card'>
+            <div class='profile-layout-right'>
+                <div class='profile-info-block'>
+                    <h2>Данни на клиента</h2>
+
+                    <div class='user-meta'>
+                        <div class='meta-item'>
+                            <strong>Име и фамилия</strong>
+                            <span th:text="${user.name}">galina_honey</span>
+                        </div>
+                        <div class='meta-item'>
+                            <strong>Имейл</strong>
+                            <span th:text="${#strings.isEmpty(user.email) ? 'Edit your profile and add your email.' : user.email}">galina@example.com</span>
+                        </div>
+                        <div class='meta-item'>
+                            <strong>Държава</strong>
+                            <span th:text="${user.country.getDisplayName()}">България</span>
+                        </div>
+                    </div>
+
+                    <a th:href="@{/orders}" class="btn" style="margin-top: 20px;">Моите поръчки</a>
+                    <a th:href="@{/products}" class="btn" style="display: block; width: fit-content; margin-top: 20px;">Магазин</a>
+
+                    <form th:action="@{/logout}" method="post" style="margin-top: 20px;">
+                        <button class="btn" type="submit">Изход</button>
+                    </form>
+
+                </div>
+
+                <aside class='profile-photo-field profile-photo-right'>
+                    <img th:if="${!#strings.isEmpty(user.profilePicture)}"
+                         th:src="${user.profilePicture}"
+                         alt="Profile picture"
+                         class="profile-avatar">
+
+                    <img th:if="${#strings.isEmpty(user.profilePicture) and user.gender.name() == 'MALE'}"
+                         th:src="@{/images/default-avatar-man.png}"
+                         alt="Profile picture"
+                         class="profile-avatar">
+
+                    <img th:if="${#strings.isEmpty(user.profilePicture) and user.gender.name() == 'FEMALE'}"
+                         th:src="@{/images/default-avatar-woman.png}"
+                         alt="Profile picture"
+                         class="profile-avatar">
+                    <label for='profileUpload' class='profile-upload-button'>Смени снимка</label>
+                    <input type='file' id='profileUpload' name='profileUpload' accept='image/*' hidden>
+                    <small>PNG или JPG файл</small>
+                </aside>
+            </div>
+        </div>
+
+    </div>
+</section>
+<footer class='site-footer'><p>&copy; 2026 HoneyShop. Всички права запазени.</p></footer>
+</body>
+</html>

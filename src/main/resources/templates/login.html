@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='bg' xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>HoneyShop - Вход</title>
+    <link rel='stylesheet' th:href="@{/css/style.css}">
+</head>
+<body>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div>
+<header class='site-header'>
+    <div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a>
+        <nav class='main-nav'><a class='nav-link active' th:href="@{/index}">Начало</a><a class='nav-link '
+                                                                                          th:href="@{/products}">Магазин</a><a
+                class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link ' th:href="@{/profile}">Моят профил</a><a
+                class='nav-link ' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav>
+        <div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill'
+                                                                                               th:href="@{/register}">Регистрирай
+            се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div>
+    </div>
+</header>
+<section class='section'>
+    <div class='container'>
+        <div class='form-wrap'><h1>Вход</h1>
+            <p>Влезте в профила си, за да направите поръчка.</p>
+            <div th:if="${loginError}" class="error-message" th:text="${loginError}">
+                Грешен имейл или парола.
+            </div>
+            <form th:action="@{/login}" th:object="${loginRequest}" method="post">
+                <div class='form-group'>
+                    <label for='email'>Имейл</label>
+                    <input id='email' th:field="*{email}" type='email' placeholder='Въведете имейл'></div>
+                    <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                <div class='form-group'>
+                    <label for='password'>Парола</label>
+                    <input id='password' th:field="*{password}" type='password' placeholder='Въведете парола'>
+                    <p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                </div>
+                <button class='btn' type='submit'>Вход</button>
+            </form>
+            <p style='margin-top:18px;'>Нямате профил? <a th:href="@{/register}"><strong>Регистрирайте се</strong></a></p>
+        </div>
+    </div>
+</section>
+<footer class='site-footer'><p>&copy; 2026 HoneyShop. Всички права запазени.</p></footer>
+</body>
+</html>

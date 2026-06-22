@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='bg' xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>HoneyShop - Админ продукти</title>
+<link rel='stylesheet' th:href="@{/css/style.css}">
+</head>
+<body>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div><header class='site-header'><div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a><nav class='main-nav'><a class='nav-link ' th:href="@{/index}">Начало</a><a class='nav-link ' th:href="@{/products}">Магазин</a><a class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link ' th:href="@{/profile}">Моят профил</a><a class='nav-link active' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav><div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill' th:href="@{/register}">Регистрирай се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div></div></header>
+
+<section class='page-hero'>
+  <div class='container'>
+    <h1>Създадени продукти</h1>
+    <p>Администраторът вижда всички създадени продукти и основните им полета от Product entity.</p>
+  </div>
+</section>
+
+<section class='section'>
+  <div class='container'>
+    <div class='table-card admin-products-card'>
+      <div class='admin-products-toolbar'>
+        <div>
+          <h2>Списък с продукти</h2>
+        </div>
+        <a class='btn' th:href="@{/product-create}">Създай нов продукт</a>
+      </div>
+
+      <div class='table-responsive'>
+        <table class='admin-products-table'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Име</th>
+              <th>Описание</th>
+              <th>Цена</th>
+              <th>Image URL</th>
+              <th>Items</th>
+              <th>Активен</th>
+              <th>Created On</th>
+              <th>Updated On</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="product : ${products}">
+              <td th:text="${product.id}">dafault id</td>
+              <td th:text="${product.name}">Акациев мед</td>
+              <td th:text="${product.description}">Натурален пчелен мед, 720 г.</td>
+              <td th:text="${product.price}">12.00 лв.</td>
+              <td><code th:text="${product.imageUrl}"></code></td>
+              <td th:text="${product.items}">15</td>
+              <td>
+                <span class='status-pill active-status' th:if="${product.isActive}">Да</span>
+                <span class='status-pill inactive-status' th:unless="${product.isActive}">Не</span>
+              </td>
+              <td th:text="${product.createdOn}">2026-05-22 10:30</td>
+              <td th:text="${product.updatedOn}">2026-05-22 10:30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class='hint admin-products-note'>
+        В реалната Spring Boot версия тези данни ще идват от базата чрез ProductService и ProductRepository.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class='site-footer'><p>&copy; 2026 HoneyShop. Всички права запазени.</p></footer>
+</body>
+</html>

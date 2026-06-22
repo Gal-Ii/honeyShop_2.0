@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang='bg' xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>HoneyShop - Начало</title>
+    <link rel='stylesheet' th:href="@{/css/style.css}">
+</head>
+<body>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div>
+<header class='site-header'>
+    <div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a>
+        <nav class='main-nav'><a class='nav-link active' th:href="@{/index}">Начало</a><a class='nav-link '
+                                                                                          th:href="@{/products}">Магазин</a><a
+                class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link ' th:href="@{/profile}">Моят профил</a><a
+                class='nav-link ' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav>
+        <div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill'
+                                                                                               th:href="@{/register}">Регистрирай
+            се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div>
+    </div>
+</header>
+<section class='hero'>
+    <div class='container hero-content'>
+        <div>
+            <div class='hero-badge'>100%<br>МЕД</div>
+            <h1>Натурален мед<br>и пчелни продукти</h1>
+            <p>Разгледайте нашия онлайн магазин и поръчайте директно от списъка с продукти.</p>
+            <div class='hero-actions'><a th:href="@{/products}" class='btn'>Към продуктите</a><a th:href="@{/register}"
+                                                                                               class='btn light'>Регистрирай
+                се</a></div>
+        </div>
+    </div>
+</section>
+
+<section class='section'>
+    <div class='container'><h2 class='section-title'>Нашите продукти</h2>
+        <div class='products-grid'>
+            <article class='product-card' th:each="product : ${products}">
+                <div class='tag'>Ново</div>
+                <div class='product-image'>
+                    <img th:if="${product.imageUrl != null and !product.imageUrl.isBlank()}"
+                         th:src="${product.imageUrl}"
+                         th:alt="${product.name}">
+                    <div th:unless="${product.imageUrl != null and !product.imageUrl.isBlank()}">
+                        🍯
+                    </div>
+                </div>
+                <div class='product-body'>
+                    <h3 th:text="${product.name}">Име на продукт</h3>
+                    <p th:text="${product.description}">Описание</p>
+                    <div class='stock' th:text="'Остават ' + ${product.items} + ' бр.'">Остават 0 бр.</div>
+                    <div class='price' th:text="${product.price} + ' лв.'">0.00 лв.</div>
+
+                    <div class='product-actions'>
+                        <form th:action="@{/cart}" th:object="${addToCartRequest}" method="post">
+                            <input type="hidden" name="source" value="index">
+                            <input type="hidden" name="productId" th:value="${product.id}">
+                            <input type='number' th:field="*{quantity}" min='1'>
+                            <p class="error"
+                               th:if="${addToCartRequest.productId == product.id and #fields.hasErrors('quantity')}"
+                               th:errors="*{quantity}">
+                            </p>
+                            <button class='btn'>Добави</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+<footer class='site-footer'><p>&copy; 2026 HoneyShop. Всички права запазени.</p></footer>
+</body>
+</html>

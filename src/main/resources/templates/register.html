@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang='bg' xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>HoneyShop - Регистрация</title>
+    <link rel='stylesheet' th:href="@{/css/style.css}">
+</head>
+<body>
+<div class='top-strip'>🐝 Добре дошли в HoneyShop — натурален мед и пчелни продукти</div>
+<header class='site-header'>
+    <div class='container header-inner'><a th:href="@{/index}" class='logo'>HoneyShop<span></span></a>
+        <nav class='main-nav'><a class='nav-link active' th:href="@{/index}">Начало</a><a class='nav-link '
+                                                                                          th:href="@{/products}">Магазин</a><a
+                class='nav-link ' th:href="@{/cart}">Количка</a><a class='nav-link ' th:href="@{/profile}">Моят профил</a><a
+                class='nav-link ' th:if="${isAdmin}" th:href="@{/admin}">Админ</a></nav>
+        <div class='header-actions'><a class='action-pill dark' th:href="@{/login}">Вход</a><a class='action-pill'
+                                                                                             th:href="@{/register}">Регистрирай
+            се</a><a class='cart-pill' th:href="@{/cart}"><span class='cart-icon'>🛒</span> 0</a></div>
+    </div>
+</header>
+<section class='section'>
+    <div class='container'>
+        <div class='form-wrap'>
+            <h1>Регистрация</h1>
+            <p>Създайте профил, за да пазите историята на поръчките си.</p>
+
+            <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+                <div class='form-grid'>
+                    <div class='form-group'>
+                        <label for='name'>Име и фамилия</label>
+                        <input id="name" th:field="*{name}" type='text' placeholder='Въведете име и фамилия'>
+                        <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+
+                    <div class='form-group'>
+                        <label for='email'>Имейл</label>
+                        <input id="email" th:field="*{email}" type='text' placeholder='Въведете имейл'>
+                        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                    </div>
+
+                    <div class='form-group'>
+                        <label for='country'>Държава</label>
+                        <select id='country' th:field="*{country}">
+                            <option value=''>Изберете държава</option>
+                            <option value='BULGARIA'>България</option>
+                            <option value='SPAIN'>Испания</option>
+                            <option value='GREECE'>Гърция</option>
+                        </select>
+                        <p class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></p>
+                    </div>
+
+                </div>
+
+                <div class='form-group'>
+                    <label for='password'>Парола</label>
+                    <input id="password" th:field="*{password}" type="password">
+                    <p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                </div>
+
+                <div class='form-group'>
+                    <label for='profilePicture'>Профилна снимка</label>
+                    <input id='profilePicture' name='profilePicture' type='file' accept='image/*'>
+                    <div class='hint'>Може да се използва и URL поле, ако бекендът го изисква.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Пол</label>
+                    <select id="gender" th:field="*{gender}">
+                        <option value="">Изберете пол</option>
+                        <option value="MALE">Мъж</option>
+                        <option value="FEMALE">Жена</option>
+                    </select>
+                    <p class="error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></p>
+                </div>
+
+                <div class='form-group'>
+                    <label>Примерни аватари</label>
+                    <div class='avatar-selector'>
+                        <div class='avatar-option'>
+                            <img src='avatar-man.png' alt='Мъжки аватар'>
+                            <strong>Аватар – мъж</strong>
+                            <small>Подходящ за default profile picture</small>
+                        </div>
+                        <div class='avatar-option'>
+                            <img src='avatar-woman.png' alt='Женски аватар'>
+                            <strong>Аватар – жена</strong>
+                            <small>Подходящ за default profile picture</small>
+                        </div>
+                    </div>
+                </div>
+
+                <button class='btn' type='submit'>Регистрирай се</button>
+            </form>
+
+            <p style='margin-top:18px;'>Вече имате профил? <a th:href="@{/login}"><strong>Вход</strong></a></p>
+        </div>
+    </div>
+</section>
+<footer class='site-footer'><p>&copy; 2026 HoneyShop. Всички права запазени.</p></footer>
+</body>
+</html>
