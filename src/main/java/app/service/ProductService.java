@@ -1,0 +1,129 @@
+package app.service;
+
+import app.exception.InvalidProductDataException;
+import app.exception.ProductNotFoundException;
+import app.exception.ProductAlreadyExistsException;
+import app.exception.UnauthorizedActionException;
+import app.model.entity.product.Product;
+import app.model.entity.user.User;
+import app.model.entity.user.UserRole;
+import app.repository.product.ProductRepository;
+import app.web.dto.product.ProductCreateRequest;
+import app.web.dto.product.ProductUpdateRequest;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public List<Product> getAllActiveProducts(){
+         return productRepository.findAllByIsActiveTrue();
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    public Product getById(UUID id){
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("No product with [%s] id.".formatted(id)));
+    }
+
+    public Product create(ProductCreateRequest request, User currentUser) {
+        if (request == null) {
+            throw new InvalidProductDataException("Product request is required.");
+        }
+
+        if (currentUser == null) {
+            throw new UnauthorizedActionException("User must be logged in.");
+        }
+
+        if (currentUser.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedActionException("Only admins can manage products.");
+        }
+
+        String name = request.getName() == null ? null : request.getName().trim();
+
+        if (productRepository.existsByName(name)) {
+            throw new ProductAlreadyExistsException("Product with this name already exists.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Product product = Product.builder()
+                .name(name)
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .imageUrl(request.getImageUrl())
+                .items(request.getItems())
+                .isActive(Boolean.TRUE.equals(request.getIsActive()))
+                .createdOn(now)
+                .updatedOn(now)
+                .build();
+
+        return productRepository.save(product);
+    }
+
+    public Product update(UUID id, ProductUpdateRequest updateRequest, User currentUser){
+
+        Product updatedProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product does not exist."));
+
+        if (currentUser == null) {
+            throw new UnauthorizedActionException("User must be logged in.");
+        }
+
+        if (currentUser.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedActionException("Only admins can manage products.");
+        }
+
+        String name = updateRequest.getName() == null ? null : updateRequest.getName().trim();
+
+        if (name == null || name.isBlank()) {
+            throw new InvalidProductDataException("Product name is required.");
+        }
+
+        if (productRepository.existsByNameAndIdNot(name, id)) {
+            throw new ProductAlreadyExistsException("Product with this name already exists.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        updatedProduct.setName(name);
+        updatedProduct.setDescription(updateRequest.getDescription());
+        updatedProduct.setPrice(updateRequest.getPrice());
+        updatedProduct.setImageUrl(updateRequest.getImageUrl());
+        updatedProduct.setItems(updateRequest.getItems());
+        updatedProduct.setIsActive(Boolean.TRUE.equals(updateRequest.getIsActive()));
+        updatedProduct.setUpdatedOn(now);
+
+        return productRepository.save(updatedProduct);
+
+    }
+
+    public Product delete(UUID id, User currentUser){
+        if (currentUser == null) {
+            throw new UnauthorizedActionException("User must be logged in.");
+        }
+
+        if (currentUser.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedActionException("Only admins can manage products.");
+        }
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product does not exist."));
+
+        product.setIsActive(false);
+        product.setUpdatedOn(LocalDateTime.now());
+        return productRepository.save(product);
+    }
+
+}
